@@ -1,6 +1,7 @@
 // import 'package:cashrich/api_service.dart';
 import 'dart:io';
 
+import 'package:cashrich/coincard.dart';
 import 'package:cashrich/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

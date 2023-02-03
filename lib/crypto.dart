@@ -18,8 +18,8 @@ class CryptoPage extends StatefulWidget {
 }
 
 class _CryptoPageState extends State<CryptoPage> {
-  List<CoinDetails> coinDetails = [];
   Future<List<CoinDetails>> fetchCoin() async {
+    List<CoinDetails> coinDetails = [];
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'X-CMC_PRO_API_KEY': '27ab17d1-215f-49e5-9ca4-afd48810c149',
@@ -33,16 +33,18 @@ class _CryptoPageState extends State<CryptoPage> {
     var body = jsonDecode(response.body);
     // print(response.body);
 
-    List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
+    List<dynamic> coinSymbol = ['BTC'];
     if (response.statusCode == 200) {
       coinSymbol.forEach((element) {
+        // print(body["data"][element]);
         coinDetails.add(CoinDetails.fromJSON(body["data"][element]));
-        coinDetails
-            .add(CoinDetails.fromJSON(body["data"][element]["quote"]["USD"]));
+        // coinDetails
+        //     .add(CoinDetails.fromJSON(body["data"][element]["quote"]["USD"]));
       });
-      print(coinDetails);
+      // print(coinSymbol);
       return coinDetails;
     } else {
+      // print(coinDetails);
       return coinDetails;
     }
   }
@@ -92,38 +94,35 @@ class _CryptoPageState extends State<CryptoPage> {
     return FutureBuilder<List<CoinDetails>>(
         future: fetchCoin(),
         builder: (context, AsyncSnapshot snapshot) {
+          List<CoinDetails> coinDetails = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting) {
+            print(snapshot.error);
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          // print(snapshot.data);
+          print(coinDetails);
 
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: coinDetails.length,
-                itemBuilder: (context, index) {
-                  return CoinCardPage(
-                      name: coinDetails[index].name.toString(),
-                      symbol: coinDetails[index].symbol.toString(),
-                      cmc_rank: coinDetails[index].cmc_rank.toDouble(),
-                      price: coinDetails[index].price.toDouble(),
-                      percent_change: coinDetails[index].price.toDouble());
-                });
+            return SafeArea(
+              child: Scaffold(
+                body: ListView.builder(
+                    itemCount: coinDetails.length,
+                    itemBuilder: (context, index) {
+                      CoinCardPage(
+                          name: coinDetails[index].name.toString(),
+                          symbol: coinDetails[index].symbol.toString(),
+                          cmc_rank: coinDetails[index].cmc_rank.toDouble(),
+                          price: coinDetails[index].price.toDouble(),
+                          percent_change: coinDetails[index].price.toDouble());
+                    }),
+              ),
+            );
           } else {
             return Center(
-              child: Text('helo'),
+              child: CircularProgressIndicator(),
             );
           }
         });
-
-    // return Scaffold(
-    //   body: Column(
-    //     children: [
-    //       Text('hello'),
-    //       Text(coinDetails.price.toString()),
-    //     ],
-    //   ),
-    // );
   }
 }

@@ -13,46 +13,22 @@ class CoinDetails {
   });
 
   factory CoinDetails.fromJSON(Map<String, dynamic> json) {
-    // print(json["name"]);
-    // print(json["symbol"]);
-    // print(json["cmc_rank"]);
-    // print(json["price"]);
-    // print(json["percent_change_24h"]);
+    print(json["name"]);
+    print(json["symbol"]);
+    print(json["cmc_rank"]);
+    print(json["quote"]["USD"]["price"]);
+    print(json["quote"]["USD"]["percent_change_24h"]);
 
     return CoinDetails(
-      name: json["name"],
-      symbol: json["symbol"],
-      cmc_rank: json["cmc_rank"],
-      price: json["price"] ?? 0,
-      percent_change: json["percent_change_24h"] ?? 0,
+      name: json["name"] ?? "n",
+      symbol: json["symbol"] ?? "s",
+      cmc_rank: json["cmc_rank"] ?? 0,
+      price: json["quote"]["USD"]["price"] ?? 0,
+      percent_change: json["quote"]["USD"]["percent_change_24h"] ?? 0,
     );
   }
+
   String toString() {
     return "name: $name, symbol: $symbol, cmc_rank: $cmc_rank  , price: $price , percent_change: $percent_change";
   }
 }
-
-// class CoinDetailsDeep {
-//   num price;
-//   num percent_change;
-//   CoinDetailsDeep({
-//     required this.price,
-//     required this.percent_change,
-//   });
-
-//   factory CoinDetailsDeep.fromJSON(Map<String, dynamic> json) {
-//     // print(json["name"]);
-//     // print(json["symbol"]);
-//     // print(json["cmc_rank"]);
-//     print(json["price"]);
-//     print(json["percent_change_24h"]);
-
-//     return CoinDetailsDeep(
-//       // name: json["name"],
-//       // symbol: json["symbol"],
-//       // cmc_rank: json["cmc_rank"],
-//       price: json["price"] ?? 0,
-//       percent_change: json["percent_change_24h"] ?? 0,
-//     );
-//   }
-// }
