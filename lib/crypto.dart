@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:cashrich/coincard.dart';
+import 'package:cashrich/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -17,8 +18,8 @@ class CryptoPage extends StatefulWidget {
 }
 
 class _CryptoPageState extends State<CryptoPage> {
-  Future<List<Coin>> fetchCoin() async {
-    coinList = [];
+  List<CoinDetails> coinDetails = [];
+  Future<List<CoinDetails>> fetchCoin() async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'X-CMC_PRO_API_KEY': '27ab17d1-215f-49e5-9ca4-afd48810c149',
@@ -27,94 +28,107 @@ class _CryptoPageState extends State<CryptoPage> {
         Uri.parse(
             'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC,ETHLTC'),
         headers: requestHeaders);
+
+    // Map<String, dynamic> values = {};
+    var body = jsonDecode(response.body);
+    // print(response.body);
+
     if (response.statusCode == 200) {
-      List<dynamic> values = [];
-      values = json.decode(response.body);
-      if (values.length > 0) {
-        for (int i = 0; i < values.length; i++) {
-          if (values[i] != null) {
-            Map<String, dynamic> map = values[i];
-            coinList.add(Coin.fromJson(map));
-          }
-        }
-        print(coinList.first.symbol);
-        setState(() {
-          coinList;
-        });
-      }
-      return coinList;
+      List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
+      coinSymbol.forEach((element) {
+        coinDetails.add(CoinDetails.fromJSON(body["data"][element]));
+        coinDetails
+            .add(CoinDetails.fromJSON(body["data"][element]["quote"]["USD"]));
+      });
+      // print(body["data"][val]["quote"]["USD"]);
+      // coinDetails.add(CoinDetailsDeep.fromJSON(body["data"][val]["quote"]) );
+
+      // for (int i = 0; i < 3; i++) {
+      //   // print(json["name"]);
+      // }
+      return coinDetails;
     } else {
-      throw Exception('Failed to load coins ');
+      return coinDetails;
     }
   }
 
-  @override
-  void initState() {
-    fetchCoin();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   fetchCoin();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Center(
-          child: Text(
-            'COINRICH',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 40,
-            ),
-            textAlign: TextAlign.center,
+    // print(coinDetails[coinDetails.length].data);
+    //   return Scaffold(
+    //     backgroundColor: Colors.grey[900],
+    //     appBar: AppBar(
+    //       backgroundColor: Colors.black,
+    //       title: const Center(
+    //         child: Text(
+    //           'CashRich',
+    //           style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             color: Colors.white,
+    //             fontSize: 40,
+    //           ),
+    //           textAlign: TextAlign.center,
 
-            // textDirection: TextAlign.center,
-          ),
-        ),
-      ),
-      body: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: coinList.length,
-          itemBuilder: (context, index) {
-            return CoinCardPage(
-              name: coinList[index].name,
-              symbol: coinList[index].symbol,
-              cmc_rank: coinList[index].cmc_rank.toDouble(),
-              price: coinList[index].price.toDouble(),
-              percent_change: coinList[index].percent_change.toDouble(),
+    //           // textDirection: TextAlign.center,
+    //         ),
+    //       ),
+    //     ),
+    //     body: ListView.builder(
+    //       scrollDirection: Axis.vertical,
+    //       itemCount: coinDetails.length,
+    //       itemBuilder: (context, index) {
+    //         return CoinCardPage(
+    //           name: '${coinDetails[index].data[index]!.name},',
+    //           symbol: '${coinDetails[index].data[index]!.symbol},',
+    //           cmc_rank: 3,
+    //           price: 2,
+    //           percent_change: 1,
+    //         );
+    //       },
+    //     ),
+    //   );
+    // }
+    return FutureBuilder<List<CoinDetails>>(
+        future: fetchCoin(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          }),
-      // body: ListView(
-      //   scrollDirection: Axis.vertical,
-      //   children: [
-      //     SizedBox(
-      //       height: 90,
-      //     ),
+          }
+          print(snapshot.data);
 
-      // CoinCardPage(
-      //   name: 'Bitcoin',
-      //   symbol: 'hello',
-      //   cmc_rank: 3,
-      //   percent_change: 4,
-      //   price: 10,
-      // ),
-      // CoinCardPage(
-      //   name: 'Bitcoin',
-      //   symbol: 'hello',
-      //   cmc_rank: 3,
-      //   percent_change: 4,
-      //   price: 10,
-      // ),
-      // CoinCardPage(
-      //   name: 'Bitcoin',
-      //   symbol: 'hello',
-      //   cmc_rank: 3,
-      //   percent_change: 4,
-      //   price: 10,
-      // ),
-      // ],
-    );
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: coinDetails.length,
+                itemBuilder: (context, index) {
+                  return CoinCardPage(
+                      name: coinDetails[index].name.toString(),
+                      symbol: coinDetails[index].symbol.toString(),
+                      cmc_rank: coinDetails[index].cmc_rank.toDouble(),
+                      price: coinDetails[index].price.toDouble(),
+                      percent_change: coinDetails[index].price.toDouble());
+                });
+          } else {
+            return Center(
+              child: Text('helo'),
+            );
+          }
+        });
+
+    // return Scaffold(
+    //   body: Column(
+    //     children: [
+    //       Text('hello'),
+    //       Text(coinDetails.price.toString()),
+    //     ],
+    //   ),
+    // );
   }
 }
