@@ -7,7 +7,7 @@ import 'package:cashrich/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'coin.dart';
+
 import 'package:http/http.dart' as http;
 
 class CryptoPage extends StatefulWidget {
@@ -33,19 +33,14 @@ class _CryptoPageState extends State<CryptoPage> {
     var body = jsonDecode(response.body);
     // print(response.body);
 
+    List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
     if (response.statusCode == 200) {
-      List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
       coinSymbol.forEach((element) {
         coinDetails.add(CoinDetails.fromJSON(body["data"][element]));
         coinDetails
             .add(CoinDetails.fromJSON(body["data"][element]["quote"]["USD"]));
       });
-      // print(body["data"][val]["quote"]["USD"]);
-      // coinDetails.add(CoinDetailsDeep.fromJSON(body["data"][val]["quote"]) );
-
-      // for (int i = 0; i < 3; i++) {
-      //   // print(json["name"]);
-      // }
+      print(coinDetails);
       return coinDetails;
     } else {
       return coinDetails;
@@ -102,7 +97,7 @@ class _CryptoPageState extends State<CryptoPage> {
               child: CircularProgressIndicator(),
             );
           }
-          print(snapshot.data);
+          // print(snapshot.data);
 
           if (snapshot.hasData) {
             return ListView.builder(
