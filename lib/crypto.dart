@@ -17,112 +17,270 @@ class CryptoPage extends StatefulWidget {
   State<CryptoPage> createState() => _CryptoPageState();
 }
 
+List<Map<String, dynamic>> data = [];
+
 class _CryptoPageState extends State<CryptoPage> {
-  Future<List<CoinDetails>> fetchCoin() async {
-    List<CoinDetails> coinDetails = [];
+  void fetchCoin() async {
+    List<CoinDetails> coins = [];
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'X-CMC_PRO_API_KEY': '27ab17d1-215f-49e5-9ca4-afd48810c149',
     };
     final response = await http.get(
         Uri.parse(
-            'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC,ETHLTC'),
+            'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC,ETH,LTC'),
         headers: requestHeaders);
 
     // Map<String, dynamic> values = {};
-    var body = jsonDecode(response.body);
+    // List <String> coins = ['BT']
+    List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
+    List body = [];
+    // var body2;
+    coinSymbol.forEach((element) {
+      body.add(json.decode(response.body)['data'][element]);
+    });
     // print(response.body);
-
-    List<dynamic> coinSymbol = ['BTC'];
+    // print(body);
     if (response.statusCode == 200) {
-      coinSymbol.forEach((element) {
-        // print(body["data"][element]);
-        coinDetails.add(CoinDetails.fromJSON(body["data"][element]));
-        // coinDetails
-        //     .add(CoinDetails.fromJSON(body["data"][element]["quote"]["USD"]));
+      setState(() {
+        data = [body[0], body[1], body[2]];
       });
       // print(coinSymbol);
-      return coinDetails;
+      print(data);
+      print(data.length);
+      print(data[2]["symbol"]);
     } else {
-      // print(coinDetails);
-      return coinDetails;
+      setState(() {
+        data = [];
+      });
     }
   }
 
-  // @override
-  // void initState() {
-  //   fetchCoin();
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    fetchCoin();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // print(coinDetails[coinDetails.length].data);
-    //   return Scaffold(
-    //     backgroundColor: Colors.grey[900],
-    //     appBar: AppBar(
-    //       backgroundColor: Colors.black,
-    //       title: const Center(
-    //         child: Text(
-    //           'CashRich',
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //             color: Colors.white,
-    //             fontSize: 40,
-    //           ),
-    //           textAlign: TextAlign.center,
-
-    //           // textDirection: TextAlign.center,
-    //         ),
-    //       ),
-    //     ),
-    //     body: ListView.builder(
-    //       scrollDirection: Axis.vertical,
-    //       itemCount: coinDetails.length,
-    //       itemBuilder: (context, index) {
-    //         return CoinCardPage(
-    //           name: '${coinDetails[index].data[index]!.name},',
-    //           symbol: '${coinDetails[index].data[index]!.symbol},',
-    //           cmc_rank: 3,
-    //           price: 2,
-    //           percent_change: 1,
-    //         );
-    //       },
-    //     ),
-    //   );
-    // }
-    return FutureBuilder<List<CoinDetails>>(
-        future: fetchCoin(),
-        builder: (context, AsyncSnapshot snapshot) {
-          List<CoinDetails> coinDetails = snapshot.data;
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            print(snapshot.error);
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          print(coinDetails);
-
-          if (snapshot.hasData) {
-            return SafeArea(
-              child: Scaffold(
-                body: ListView.builder(
-                    itemCount: coinDetails.length,
-                    itemBuilder: (context, index) {
-                      CoinCardPage(
-                          name: coinDetails[index].name.toString(),
-                          symbol: coinDetails[index].symbol.toString(),
-                          cmc_rank: coinDetails[index].cmc_rank.toDouble(),
-                          price: coinDetails[index].price.toDouble(),
-                          percent_change: coinDetails[index].price.toDouble());
-                    }),
+    return Scaffold(
+      backgroundColor: Colors.grey[900],
+      appBar: AppBar(
+        toolbarHeight: 80,
+        backgroundColor: Colors.black,
+        title: Center(
+          child: Text(
+            'CashRich',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 40,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                height: 60,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.pie_chart_outline_sharp,
+                      color: Colors.yellow,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Show Chart',
+                      style: TextStyle(color: Colors.yellow, fontSize: 17),
+                    ),
+                    SizedBox(
+                      width: 200,
+                    ),
+                    Text(
+                      'Count: ' + data.length.toString(),
+                      style: TextStyle(color: Colors.yellow),
+                    ),
+                  ],
+                ),
               ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+            ),
+            Container(
+              height: 700,
+              // width: 300,
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                children: buildCoins(),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
+}
+
+List<CoinDetails> getCoins() {
+  return <CoinDetails>[
+    for (int i = 0; i < data.length; i++)
+      CoinDetails(
+          data[i]['name'].toString(),
+          data[i]['symbol'].toString(),
+          data[i]['cmc_rank'].toString(),
+          data[i]['quote']['USD']['price'],
+          data[i]['quote']['USD']['percent_change_24h']),
+  ];
+}
+
+List<Widget> buildCoins() {
+  List<Widget> list = [];
+  for (var i = 0; i < getCoins().length; i++) {
+    list.add(buildCoinsCard(getCoins()[i], i));
+  }
+  return list;
+}
+
+Widget buildCoinsCard(CoinDetails coins, int index) {
+  return GestureDetector(
+    onTap: () {},
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-1, -1),
+          ),
+        ],
+      ),
+      margin: EdgeInsets.only(
+          right: 16, left: index == 0 ? 16 : 0, bottom: 16, top: 8),
+      padding: EdgeInsets.all(16),
+      width: 350,
+      height: 120,
+      child: Row(
+        children: [
+          Expanded(
+            child: Hero(
+              tag: coins.name,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    height: 19,
+                    child: Text(
+                      coins.name,
+                      style: TextStyle(
+                          color: Colors.yellow,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      // width: 95,
+                      // height: ,
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Price  \$ ' + coins.price.toStringAsFixed(2),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              SizedBox(
+                width: 40,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.arrow_upward,
+                    color: coins.percent_change_24h > 0
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                  SizedBox(
+                      // width: 5,
+                      ),
+                  Text(
+                    coins.percent_change_24h.toStringAsPrecision(2) + "%",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Rank  ' + coins.cmc_rank,
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            width: 150,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  height: 40,
+                  width: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 50,
+                      height: 10,
+                      color: Colors.grey[900],
+                      child: Text(
+                        coins.symbol.toString().toUpperCase(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 7,
+                ),
+                Icon(
+                  Icons.arrow_circle_right_rounded,
+                  color: Colors.yellow,
+                  size: 30,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
