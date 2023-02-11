@@ -1,339 +1,158 @@
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter/src/widgets/placeholder.dart';
-// import 'package:flutter/material.dart';
+import 'package:cashrich/model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 
-// class CoinCardPage extends StatelessWidget {
-//   // String price = '23749134234';
-//   CoinCardPage({
-//     required this.name,
-//     required this.symbol,
-//     required this.cmc_rank,
-//     required this.price,
-//     required this.percent_change_24h,
-//   });
-//   String name;
-//   String symbol;
-//   String cmc_rank;
-//   double price;
-//   double percent_change_24h;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.grey[900],
-//       appBar: AppBar(
-//         backgroundColor: Colors.black,
-//         title: Text(
-//           'CashRich',
-//           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-//         ),
-//       ),
-//       body: SizedBox(
-//         height: MediaQuery.of(context).size.height,
-//         child: ListView(
-//           scrollDirection: Axis.vertical,
-//           children: [
-//             SizedBox(
-//               height: 10,
-//             ),
-//             SingleChildScrollView(
-//               scrollDirection: Axis.horizontal,
-//               child: Container(
-//                 height: 120,
-//                 decoration: BoxDecoration(
-//                   color: Colors.black87,
-//                   borderRadius: BorderRadius.circular(20),
-//                   boxShadow: const [
-//                     BoxShadow(
-//                       color: Colors.grey,
-//                       offset: Offset(1, 1),
-//                       blurRadius: 10,
-//                       spreadRadius: 1,
-//                     ),
-//                     BoxShadow(
-//                       color: Colors.grey,
-//                       offset: Offset(-1, -1),
-//                       blurRadius: 10,
-//                       spreadRadius: 1,
-//                     ),
-//                   ],
-//                 ),
-//                 child: Row(
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.all(15.0),
-//                       child: Expanded(
-//                         child: Column(
-//                           // mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Container(
-//                               height: 50,
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: Text(
-//                                   name,
-//                                   style: TextStyle(
-//                                       color: Colors.yellow,
-//                                       fontSize: 30,
-//                                       fontWeight: FontWeight.bold),
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(
-//                               height: 10,
-//                             ),
-//                             Text(
-//                               // 'Price',
-//                               'Price  \$' +
-//                                   price.toDouble().toString().substring(0, 3),
-//                               style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 15,
-//                                   fontWeight: FontWeight.normal),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.all(15.0),
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Container(
-//                             height: 50,
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: Row(
-//                                 children: [
-//                                   Icon(
-//                                     Icons.arrow_upward,
-//                                     color: percent_change_24h < 0
-//                                         ? Colors.green
-//                                         : Colors.red,
-//                                     size: 14,
-//                                   ),
-//                                   Text(
-//                                     percent_change_24h.toString(),
-//                                     style: TextStyle(
-//                                         color: percent_change_24h < 0
-//                                             ? Colors.green
-//                                             : Colors.red,
-//                                         fontSize: 14,
-//                                         fontWeight: FontWeight.normal),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                           SizedBox(
-//                             height: 10,
-//                           ),
-//                           Text(
-//                             'Rank' + cmc_rank.toString(),
-//                             style: TextStyle(
-//                                 color: Colors.white,
-//                                 fontSize: 15,
-//                                 fontWeight: FontWeight.normal),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.all(15.0),
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.center,
-//                         crossAxisAlignment: CrossAxisAlignment.end,
-//                         children: [
-//                           Container(
-//                             height: 50,
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: Container(
-//                                 alignment: Alignment.center,
-//                                 width: 50,
-//                                 height: 10,
-//                                 color: Colors.grey[900],
-//                                 child: Text(
-//                                   symbol.toString().toUpperCase(),
-//                                   style: TextStyle(
-//                                       color: Colors.white,
-//                                       fontSize: 15,
-//                                       fontWeight: FontWeight.bold),
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                           SizedBox(
-//                             height: 10,
-//                           ),
-//                           Icon(
-//                             Icons.arrow_circle_right_rounded,
-//                             color: Colors.yellow,
-//                             size: 30,
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-// //     return Flexible(
-// //         child: Padding(
-// //       padding: const EdgeInsets.all(10.0),
-// //       child: Container(
-// //         height: 150,
-// //         decoration: BoxDecoration(
-// //           color: Colors.black87,
-// //           borderRadius: BorderRadius.circular(20),
-// //           boxShadow: const [
-// //             BoxShadow(
-// //               color: Colors.grey,
-// //               offset: Offset(1, 1),
-// //               blurRadius: 10,
-// //               spreadRadius: 1,
-// //             ),
-// //           ],
-// //         ),
-// //         child: Row(
-// //           children: [
-// //             SizedBox(
-// //               width: 20,
-// //             ),
-// //             Column(
-// //               children: [
-// //                 SizedBox(height: 10),
-// //                 Container(
-// //                   height: 80,
-// //                   width: 80,
-// //                   child: Text(
-// //                     name,
-// //                     style: TextStyle(
-// //                         color: Colors.yellow,
-// //                         fontSize: 30,
-// //                         fontWeight: FontWeight.bold),
-// //                   ),
-// //                 ),
-// //                 SizedBox(
-// //                   height: 20,
-// //                 ),
-// //                 Row(
-// //                   children: [
-// //                     Container(
-// //                       height: 30,
-// //                       width: 40,
-// //                       child: Text(
-// //                         'Price',
-// //                         style: TextStyle(
-// //                             color: Colors.white,
-// //                             fontSize: 15,
-// //                             fontWeight: FontWeight.normal),
-// //                       ),
-// //                     ),
-// //                     Container(
-// //                       height: 30,
-// //                       width: 40,
-// //                       child: Text(
-// //                         '\$' + price.toDouble().toString().trim(),
-// //                         // textAlign: TextAlign.justify,
-// //                         style: TextStyle(
-// //                             color: Colors.white,
-// //                             fontSize: 15,
-// //                             fontWeight: FontWeight.normal),
-// //                       ),
-// //                     )
-// //                   ],
-// //                 ),
-// //               ],
-// //             ),
-// //             SizedBox(
-// //               height: 150,
-// //               width: 15,
-// //             ),
-// //             Column(
-// //               children: [
-// //                 SizedBox(
-// //                   height: 13,
-// //                 ),
-// //                 Row(
-// //                   children: [
-// //                     Container(
-// //                       height: 30,
-// //                       width: 20,
-// //                       child: Icon(
-// //                         Icons.arrow_upward,
-// //                         color: Colors.green,
-// //                       ),
-// //                     ),
-// //                     SizedBox(
-// //                       height: 1,
-// //                       width: 3,
-// //                     ),
-// //                     Text(
-// //                       percent_change.toDouble().toString().trim() + '%',
-// //                       style: TextStyle(
-// //                           color: Colors.white,
-// //                           fontSize: 15,
-// //                           fontWeight: FontWeight.normal),
-// //                     ),
-// //                   ],
-// //                 ),
-// //                 SizedBox(
-// //                   height: 68,
-// //                 ),
-// //                 Text(
-// //                   'Rank    ' + cmc_rank.toDouble().toString(),
-// //                   // textAlign: TextAlign.justify,
-// //                   style: TextStyle(
-// //                       color: Colors.white,
-// //                       fontSize: 15,
-// //                       fontWeight: FontWeight.normal),
-// //                 ),
-// //               ],
-// //             ),
-// //             SizedBox(
-// //               width: 80,
-// //             ),
-// //             Column(
-// //               children: [
-// //                 SizedBox(
-// //                   height: 20,
-// //                 ),
-// //                 Container(
-// //                   color: Colors.grey[700],
-// //                   height: 20,
-// //                   width: 70,
-// //                   child: Text(
-// //                     symbol,
-// //                     textAlign: TextAlign.center,
-// //                     style: TextStyle(
-// //                         color: Colors.white,
-// //                         fontSize: 20,
-// //                         fontWeight: FontWeight.bold),
-// //                   ),
-// //                 ),
-// //                 SizedBox(
-// //                   width: 50,
-// //                   height: 55,
-// //                 ),
-// //                 Icon(
-// //                   Icons.arrow_circle_right_rounded,
-// //                   color: Colors.yellow,
-// //                   size: 40,
-// //                 ),
-// //               ],
-// //             ),
-// //           ],
-// //         ),
-// //       ),
-// //     ));
-// //   }
-// // }
+class CoinCardPage extends StatefulWidget {
+  CoinDetails coins;
+  int index;
+  // CoinCardPage({
+  //   required this.coins,
+  //   required this.index,
+  // });
+  CoinCardPage(this.coins, this.index);
+  @override
+  State<CoinCardPage> createState() => _CoinCardPageState();
+}
+
+class _CoinCardPageState extends State<CoinCardPage> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(-1, -1),
+            ),
+          ],
+        ),
+        margin: EdgeInsets.only(
+            right: 16, left: widget.index == 0 ? 16 : 0, bottom: 16, top: 8),
+        padding: const EdgeInsets.all(16),
+        width: 350,
+        height: 120,
+        child: Row(
+          children: [
+            Expanded(
+              child: Hero(
+                tag: widget.coins.name,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      height: 19,
+                      child: Text(
+                        widget.coins.name,
+                        style: const TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Container(
+                        // width: 95,
+                        // height: ,
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Price  \$ ' + widget.coins.price.toStringAsFixed(2),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                const SizedBox(
+                  width: 40,
+                ),
+                Row(
+                  children: [
+                    widget.coins.percent_change_24h > 0
+                        ? const Icon(
+                            Icons.arrow_upward,
+                            color: Colors.green,
+                          )
+                        : const Icon(
+                            Icons.arrow_downward,
+                            color: Colors.red,
+                          ),
+                    const SizedBox(
+                        // width: 5,
+                        ),
+                    Text(
+                      widget.coins.percent_change_24h.toStringAsPrecision(2) +
+                          "%",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'Rank  ' + widget.coins.cmc_rank,
+                      style: const TextStyle(color: Colors.white),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              width: 150,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 50,
+                        height: 10,
+                        color: Colors.grey[900],
+                        child: Text(
+                          widget.coins.symbol.toString().toUpperCase(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 7,
+                  ),
+                  const Icon(
+                    Icons.arrow_circle_right_rounded,
+                    color: Colors.yellow,
+                    size: 30,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

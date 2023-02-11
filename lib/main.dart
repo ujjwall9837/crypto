@@ -1,10 +1,7 @@
 // import 'package:cashrich/api_service.dart';
-import 'dart:io';
 
-import 'package:cashrich/coincard.dart';
 import 'package:cashrich/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 void main() async {
   runApp(MyApp());
@@ -13,7 +10,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: CryptoPage(),
     );
   }
