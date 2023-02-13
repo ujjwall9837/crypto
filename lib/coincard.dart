@@ -1,7 +1,5 @@
 import 'package:cashrich/model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class CoinCardPage extends StatefulWidget {
   CoinDetails coins;
@@ -50,24 +48,24 @@ class _CoinCardPageState extends State<CoinCardPage> {
                       height: 19,
                       child: Text(
                         widget.coins.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: Colors.yellow,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 35,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
                         // width: 95,
                         // height: ,
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Price  \$ ' + widget.coins.price.toStringAsFixed(2),
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -77,7 +75,7 @@ class _CoinCardPageState extends State<CoinCardPage> {
             ),
             Column(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 40,
                 ),
                 Row(
@@ -95,8 +93,7 @@ class _CoinCardPageState extends State<CoinCardPage> {
                         // width: 5,
                         ),
                     Text(
-                      widget.coins.percent_change_24h.toStringAsPrecision(2) +
-                          "%",
+                      widget.coins.percent_change_24h.toStringAsFixed(2) + "%",
                       style: const TextStyle(color: Colors.white),
                     ),
                   ],

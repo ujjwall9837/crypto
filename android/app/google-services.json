@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "55267118613",
+    "project_id": "cashrich-fdf38",
+    "storage_bucket": "cashrich-fdf38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55267118613:android:8eaf290f93c7dbe8e6481c",
+        "android_client_info": {
+          "package_name": "com.example.cashrich"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55267118613-49au926cqgauov1jtimrtnfjgpn7v992.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhJ10Rcgt5bC67E8XM-hGpgyhabJrTcOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55267118613-49au926cqgauov1jtimrtnfjgpn7v992.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,7 @@ class CoinDetails {
   String name;
   String symbol;
   String cmc_rank;
+
   double price;
   double percent_change_24h;
   CoinDetails(

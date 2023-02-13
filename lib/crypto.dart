@@ -1,21 +1,31 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:convert';
 
 import 'package:cashrich/coincard.dart';
-import 'package:cashrich/model.dart';
-import 'package:flutter/material.dart';
 
+import 'package:cashrich/model.dart';
+import 'package:cashrich/search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CryptoPage extends StatefulWidget {
-  const CryptoPage({super.key});
+  // final Function(User?) onSignOut
+  List<String> coinSymbol;
+
+  CryptoPage({super.key, required this.coinSymbol});
+//  required this.onSignOut
+  // Future<void> logout() async {
+  //   await FirebaseAuth.instance.signOut();
+  //   onSignOut(null);
+  // }
 
   @override
   State<CryptoPage> createState() => _CryptoPageState();
 }
 
 List<Map<String, dynamic>> data = [];
+// btc
+// List<String> coinSymbol = ['BTC'];
 
 class _CryptoPageState extends State<CryptoPage> {
   void fetchCoin() async {
@@ -31,22 +41,33 @@ class _CryptoPageState extends State<CryptoPage> {
 
     // Map<String, dynamic> values = {};
     // List <String> coins = ['BT']
-    List<String> coinSymbol = ['BTC', 'ETH', 'LTC'];
-    List body = [];
+    List body1 = [];
     // var body2;
-    coinSymbol.forEach((element) {
-      body.add(json.decode(response.body)['data'][element]);
+    // if (widget.coinSymbol.length == 0) {
+    //   body1.add(json.decode(response.body)['data']['BTC']);
+    //   print(body1);
+    //   // body1.add(json.decode(response.body)['data']['ETH']);
+    //   // body1.add(json.decode(response.body)['data']['LTC']);
+    // } else {
+    widget.coinSymbol.forEach((element) {
+      body1.add(json.decode(response.body)['data'][element]);
     });
+    print(body1.length);
+
     // print(response.body);
     // print(body);
     if (response.statusCode == 200) {
       setState(() {
-        data = [body[0], body[1], body[2]];
+        // data = [body1[0], body1[1], body1[2]];
+        for (var i = 0; i < body1.length; i++) {
+          data.add(body1[i]);
+        }
       });
+
       // print(coinSymbol);
-      print(data);
-      print(data.length);
-      print(data[2]["symbol"]);
+      // print(data);
+      // print(data.length);
+      // print(data[2]["symbol"]);
     } else {
       setState(() {
         data = [];
@@ -65,9 +86,26 @@ class _CryptoPageState extends State<CryptoPage> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        toolbarHeight: 80,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 60,
         backgroundColor: Colors.black,
-        title: Center(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              setState(
+                () {
+                  data = [];
+                },
+              );
+
+              Navigator.of(context).pop();
+            },
+            tooltip: 'Logout',
+            color: Colors.yellow,
+          )
+        ],
+        title: const Center(
           child: Text(
             'CashRich',
             style: TextStyle(
@@ -80,33 +118,33 @@ class _CryptoPageState extends State<CryptoPage> {
         ),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 height: 60,
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.pie_chart_outline_sharp,
                       color: Colors.yellow,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text(
+                    const Text(
                       'Show Chart',
                       style: TextStyle(color: Colors.yellow, fontSize: 17),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 200,
                     ),
                     Text(
-                      'Count: ' + data.length.toString(),
-                      style: TextStyle(color: Colors.yellow),
+                      'Count: ' + widget.coinSymbol.length.toString(),
+                      style: const TextStyle(color: Colors.yellow),
                     ),
                   ],
                 ),
@@ -116,7 +154,7 @@ class _CryptoPageState extends State<CryptoPage> {
               height: 700,
               // width: 300,
               child: ListView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 children: buildCoins(),
               ),
@@ -129,6 +167,8 @@ class _CryptoPageState extends State<CryptoPage> {
 }
 
 List<CoinDetails> getCoins() {
+  // print('getcoins');
+  // print(data.length);
   return <CoinDetails>[
     for (int i = 0; i < data.length; i++)
       CoinDetails(
@@ -142,6 +182,8 @@ List<CoinDetails> getCoins() {
 
 List<Widget> buildCoins() {
   List<Widget> list = [];
+  // print('buildcoins');
+  // print(getCoins().length);
   for (var i = 0; i < getCoins().length; i++) {
     list.add(CoinCardPage(getCoins()[i], i));
   }
