@@ -10,7 +10,7 @@ Container signInButton(BuildContext context, Function onTap, String text) {
       child: Container(
         padding: EdgeInsets.all(25),
         decoration: BoxDecoration(
-            color: Colors.deepPurple, borderRadius: BorderRadius.circular(12)),
+            color: Colors.deepOrange, borderRadius: BorderRadius.circular(12)),
         child: Center(
           child: Text(
             text,

@@ -44,15 +44,22 @@ class _CryptoPageState extends State<CryptoPage> {
     // List <String> coins = ['BT']
     List body1 = [];
     // var body2;
-    // if (widget.coinSymbol.length == 0) {
-    //   body1.add(json.decode(response.body)['data']['BTC']);
-    //   print(body1);
-    //   // body1.add(json.decode(response.body)['data']['ETH']);
-    //   // body1.add(json.decode(response.body)['data']['LTC']);
-    // } else {
-    widget.coinSymbol.forEach((element) {
-      body1.add(json.decode(response.body)['data'][element]);
-    });
+
+    int length;
+    if (widget.coinSymbol[0].isEmpty)
+      length = 0;
+    else
+      length = widget.coinSymbol.length;
+    if (length == 0) {
+      body1.add(json.decode(response.body)['data']['BTC']);
+
+      body1.add(json.decode(response.body)['data']['ETH']);
+      body1.add(json.decode(response.body)['data']['LTC']);
+    } else {
+      widget.coinSymbol.forEach((element) {
+        body1.add(json.decode(response.body)['data'][element]);
+      });
+    }
     print(body1.length);
 
     // print(response.body);
@@ -144,7 +151,7 @@ class _CryptoPageState extends State<CryptoPage> {
                       width: 200,
                     ),
                     Text(
-                      'Count: ' + widget.coinSymbol.length.toString(),
+                      'Count: ' + data.length.toString(),
                       style: const TextStyle(color: Colors.yellow),
                     ),
                   ],
