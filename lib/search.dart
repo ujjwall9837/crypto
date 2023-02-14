@@ -70,13 +70,14 @@ class _SearchPageState extends State<SearchPage> {
               List<String> list = coinController.text.split(',');
               for (var i = 0; i < list.length; i++) {
                 list[i] = list[i].toUpperCase();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CryptoPage(coinSymbol: list),
-                  ),
-                );
               }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CryptoPage(coinSymbol: list),
+                ),
+              );
+
               print(list);
             }, 'SHOW'),
             SizedBox(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cashrich/coincard.dart';
 
@@ -184,7 +185,7 @@ List<Widget> buildCoins() {
   List<Widget> list = [];
   // print('buildcoins');
   // print(getCoins().length);
-  for (var i = 0; i < getCoins().length; i++) {
+  for (var i = 0; i < (getCoins().length); i++) {
     list.add(CoinCardPage(getCoins()[i], i));
   }
   return list;
